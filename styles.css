@@ -4,8 +4,7 @@ body {
     height: 100vh;
     margin: 0 auto;
     overflow: hidden;
-    padding: 2rem;
-    color: white;
+    color: #33ff33;
     font: 1.3rem Inconsolata, monospace;
     max-width: 50em;
 }
@@ -27,8 +26,12 @@ body::after {
     pointer-events: none;
 }
 
-/* https://retrocomputing.stackexchange.com/a/12842 */
-pre {
-    color: #f0fff8;
-    text-shadow: 0 0 3px #80ffc0, 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 30px #00ff66;
+#terminal {
+    white-space: pre-wrap;
+    text-shadow: 0 0 2px white;
+}
+
+#buttons {
+    position: absolute;
+    bottom: 100px;
 }
