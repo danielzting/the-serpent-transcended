@@ -3,10 +3,19 @@ body {
     background-color: black;
     height: 100vh;
     margin: 0 auto;
+    padding-top: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
     overflow: hidden;
-    color: #33ff33;
-    font: 1.3rem Inconsolata, monospace;
     max-width: 50em;
+}
+
+pre, input {
+    color: #33ff33;
+    font: 1rem Inconsolata, monospace;
+    background: none;
+    white-space: pre-wrap;
+    text-shadow: 0 0 2px white;
 }
 
 body::after {
@@ -26,12 +35,14 @@ body::after {
     pointer-events: none;
 }
 
-#terminal {
-    white-space: pre-wrap;
-    text-shadow: 0 0 2px white;
+input {
+    display: block;
+    border: none;
+    outline: none;
+    text-align: left;
+    padding: 0px;
 }
 
-#buttons {
-    position: absolute;
-    bottom: 100px;
+input:hover {
+    color: #ffb000;
 }
