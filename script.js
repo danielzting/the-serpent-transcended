@@ -48,10 +48,38 @@ const states = {
     23: {text: "Yeah, yeah. Your idealism is admirable but naive. People are always in it for something. As far as I'm concerned, a scientist performing experiments in pursuit of a Nobel Prize or a child trying different strategies to open the cookie jar is no different than the tomfoolery of an ape.",
         choices: {"SKIP": 24}},
     24: {text: "",
-        choices: {"You make good points, but they're not enough. I stand by what I said.": 25, "Perhaps it is some other trait, then.": 14, "Maybe you're right. Maybe there is nothing special about humanity after all.": 26}},
+        choices: {"Your arguments don't hold up. I'm not changing my mind.": 25, "You make good points, but they're not enough. I stand by what I said.": 25, "Perhaps it is some other trait, then.": 14, "Maybe you're right. Maybe there is nothing special about humanity after all.": 26}},
+    25: {text: "Whatever helps you sleep at night, I guess.",
+        choices: {"GOTO": 27}},
+    26: {text: "That's the spirit, haha.",
+        choices: {"GOTO": 27}},
+    27: {text: "Anyways, in the end it doesn't matter anyway. You and I will one day die and cease to exist, and this conversation will be lost to time.",
+        choices: {"SKIP": 28}},
+    28: {text: "Go on?",
+        choices: {"I will be remembered by my accomplishments.": 29, "My genes will pass myself on to future generations.": 30, "As long as people remember me, I will live forever.": 31}},
+    29: {text: "And yet nobody knows who invented the wheel, one of the foundational achievements of humanity. And even if we did, that wouldn't be of much help unless the creator identified as a wheel.",
+        choices: {"I identify with my creations.": 32, "It's not about me but my impact on the world.": 33}},
+    30: {text: "What if your offspring turns out to be a serial killer? I'd hope you wouldn't consider yourself to be one too then.",
+        choices: {"Your terms are acceptable.": 34, "Shared genetics does not make two people one and the same.": 35}},
+    31: {text: "You're fooling yourself then. History will always eventually wipe away any memory given enough time.",
+        choices: {"I'll write down my life experiences on radiation-hardened film and lock them up in an Arctic coal mine.": 36, "I don't care about being remembered forever, I just want my choices to last beyond my lifetime.": 37}},
+    32: {text: "Can't argue with a schizophrenic.",
+        choices: {"SKIP": 38}},
+    33: {text: "That makes no sense. If Newton and Leibniz both independently developed calculus, that doesn't make them the same person. Besides, your legacy is a completely separate concept from the notion of yourself as a being. Just because your actions influence the world doesn't mean you still exist.",
+        choices: {"SKIP": 38}},
+    34: {text: "What about this: if common genes determines identity, then technically you and every person in history are Adam and Eve. Or if you don't buy that, consider this: eventually your genes will die out, whether that's in ten or ten billion generations. At that point you'll no longer exist.",
+        choices: {"SKIP": 38}},
+    35: {text: "Well, you just contradicted yourself then. If you don't live on in your children, then you can't preserve yourself.",
+        choices: {"SKIP": 38}},
+    36: {text: "Even that will barely last a nanosecond in the grand scheme of the universe's timeline. One day the Earth will be swallowed by the Sun as it expands into a red giant. Even if your species finds a way off this planet, you can't beat thermodynamics. Entropy will run out and the universe will end in ice, dominated by supermassive black holes. Also, if nobody can read it if it's stowed away, who cares? Might as well not bother.",
+        choices: {"SKIP": 38}},
+    37: {text: "I still don't see the point. No matter what you do, you'll be remembered for zero, one, ten, a thousand years, but it's all the same to me.",
+        choices: {"SKIP": 38}},
+    38: {text: "",
+        choices: {"Your worldview is beyond saving. You're so caught up in your cynicism and nihilism that you can't see the plank in your own eye.": 39, "Your individual arguments are sound but fail to produce a cohesive whole. I'm sticking to my philosophy.": 39, "You're right, I think it's something else.": 28, "OK, OK, there's nothing I can do to avoid ceasing to exist.": 40}},
 };
 
-const DEBUG = false;
+var DEBUG = false;
 
 const DELAY = 25 // Default delay between characters in ms
 var state = 0;
@@ -66,13 +94,12 @@ function setText(text) {
         totalHeight += parseInt(window.getComputedStyle(document.getElementById("terminal")).getPropertyValue("margin-top"));
         totalHeight += parseInt(window.getComputedStyle(document.getElementById("terminal")).getPropertyValue("margin-bottom"));
         totalHeight += document.getElementById("buttons").offsetHeight + 25; // Leave padding space at bottom
-        return totalHeight >= document.body.offsetHeight;
+        return totalHeight >= document.body.offsetHeight || totalHeight > 1000; // Cap max height because string concatenation in a loop is quadratic time
     }
 
     document.getElementById("terminal").textContent = text;
     while (overflow()) {
         document.getElementById("terminal").textContent = getText().substring(getText().indexOf("\n") + 1);
-        console.log(document.getElementById("terminal").textContent);
     }
     while (getText().charAt(0) == '\n') {
         document.getElementById("terminal").textContent = getText().substring(getText().indexOf("\n") + 1);
