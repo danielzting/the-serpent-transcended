@@ -8,6 +8,12 @@ body {
     padding-right: 25px;
     overflow: hidden;
     max-width: 50em;
+    display: flex;
+    align-items: center;
+}
+
+#container {
+    height: min(100%, 640px);
 }
 
 pre, input {

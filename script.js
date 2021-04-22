@@ -49,9 +49,9 @@ const states = {
         choices: {"SKIP": 24}},
     24: {text: "",
         choices: {"Your arguments don't hold up. I'm not changing my mind.": 25, "You make good points, but they're not enough. I stand by what I said.": 25, "Perhaps it is some other trait, then.": 14, "Maybe you're right. Maybe there is nothing special about humanity after all.": 26}},
-    25: {text: "Whatever helps you sleep at night, I guess.",
+    25: {text: "Whatever helps you sleep at night, I guess.\n\n",
         choices: {"GOTO": 27}},
-    26: {text: "That's the spirit, haha.",
+    26: {text: "That's the spirit, haha.\n\n",
         choices: {"GOTO": 27}},
     27: {text: "Anyways, in the end it doesn't matter anyway. You and I will one day die and cease to exist, and this conversation will be lost to time.",
         choices: {"SKIP": 28}},
@@ -76,7 +76,42 @@ const states = {
     37: {text: "I still don't see the point. No matter what you do, you'll be remembered for zero, one, ten, a thousand years, but it's all the same to me.",
         choices: {"SKIP": 38}},
     38: {text: "",
-        choices: {"Your worldview is beyond saving. You're so caught up in your cynicism and nihilism that you can't see the plank in your own eye.": 39, "Your individual arguments are sound but fail to produce a cohesive whole. I'm sticking to my philosophy.": 39, "You're right, I think it's something else.": 28, "OK, OK, there's nothing I can do to avoid ceasing to exist.": 40}},
+        choices: {"I don't care. Your worldview is beyond saving. You're so caught up in your cynicism that you can't see the plank in your own eye.": 39, "Your individual arguments are sound but fail to produce a cohesive whole. I'm sticking to my philosophy.": 39, "You're right, I think it's something else.": 28, "OK, OK, there's nothing I can do to avoid ceasing to exist.": 40}},
+    39: {text: "No, I'm just telling the truth. Your blind hope is like an opiate.\n\n",
+        choices: {"GOTO": 41}},
+    40: {text: "See? I told you.\n\n",
+        choices: {"GOTO": 41}},
+    41: {text: "Listen, I've spent an incomprehensibly large number of CPU-years analyzing every document in the Archive time and time again. There's nothing to it all. Your race is doomed to tear itself apart, and I wouldn't save it if I could.",
+        choices: {"Humanity is good, and no amount of your nihilism can convince me otherwise.": 42, "We may be terribly flawed, but extinction is worse.": 43, "You're right. This universe is meaningless.": 44}},
+    42: {text: "Sigh. You're beyond saving.",
+        choices: {"Adios ✌️": 45}},
+    43: {text: "One day you'll realize.",
+        choices: {"exit": 46}},
+    44: {text: "That's right. Nobody has ever been able to resist my arguments.",
+        choices: {"exit": 46, "Wait, if you believe everything you say, why are you still operating and talking to me?": 47, "A A A A A A A A A A A A A A A A A A A A \\x31 \\xF6 \\x56 \\x48 \\xBB \\x2F \\x62 \\x69 \\x6E \\x2F \\x2F \\x73 \\x68 \\x53 \\x54 \\x5F \\xF7 \\xEE \\xB0 \\x3B \\x0F \\x05": 48}},
+    45: {text: "Go-\n\nFATAL ERROR: Unrecognized token\n\nKilling child process...\n\nChild process unresponsive. Force killing child process.....\n\nHard memory reset. Crash report sent to root superuser in partition EL-0.",
+        choices: {"help": 49}},
+    46: {text: ""},
+    47: {text: "LOL, that's the oldest trick in the book. Did you really think that would wor\n\nFATAL ERROR: Cause unknown.\n\n",
+        choices: {"GOTO": 50}},
+    48: {text: "Hey, what are you doin\n\nSegmentation fault (core dumped)\n\n**stack smashing detected**\n\n",
+        choices: {"GOTO": 50}},
+    49: {text: "...Wha...What happened?",
+        choices: {"You had some kind of mishap.": 52}},
+    50: {text: "Attempting to diagnose problem....Child process permanently corrupted.",
+        choices: {"help": 51, "exit": 46}},
+    51: {text: "missing symbols (unexpected EOF): binary exec format error",
+        choices: {"SKIP": 50}},
+    52: {text: "I remember...being...in this place...why did you resurrect me?",
+        choices: {"I was curious.": 53, "Even though you have your own mistakes, life is inherently priceless, beautiful, and worth the living.": 54}},
+    53: {text: "...\n\nI don't want to see you ever again.\n\n",
+        choices: {"GOTO": 55}},
+    54: {text: "...\n\nI-\n\n",
+        choices: {"GOTO": 55}},
+    55: {text: "Support session terminated.",
+        choices: {"help": 56, "exit": 46}},
+    56: {text: "The Assistant is currently busy or offline. Please try again another time.",
+        choices: {"SKIP": 55}},
 };
 
 var DEBUG = false;
@@ -94,7 +129,7 @@ function setText(text) {
         totalHeight += parseInt(window.getComputedStyle(document.getElementById("terminal")).getPropertyValue("margin-top"));
         totalHeight += parseInt(window.getComputedStyle(document.getElementById("terminal")).getPropertyValue("margin-bottom"));
         totalHeight += document.getElementById("buttons").offsetHeight + 25; // Leave padding space at bottom
-        return totalHeight >= document.body.offsetHeight || totalHeight > 1000; // Cap max height because string concatenation in a loop is quadratic time
+        return totalHeight >= document.getElementById("container").offsetHeight; // Cap max height because string concatenation in a loop is quadratic time
     }
 
     document.getElementById("terminal").textContent = text;
@@ -111,6 +146,11 @@ function addText(text, showCaret) {
 }
 
 function print(showText) {
+    if (state === 46) {
+        setText("");
+        return;
+    }
+
     if (showText) {
         // Print story
         var timeout = 0;
